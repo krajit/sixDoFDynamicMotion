@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  plus                                  |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         Euler;
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+    grad(T)         Gauss linear;
+}
+
+divSchemes
+{
+    default         none;
+//    div(phi,U)      Gauss limitedLinearV 1;
+//    div(phi,k)      Gauss limitedLinear 1;
+//    div(phi,epsilon) Gauss limitedLinear 1;
+//    div(phi,omega)  Gauss limitedLinear 1;;
+//    div(phi,R)      Gauss limitedLinear 1;
+//    div(R)          Gauss linear;
+//    div(phi,nuTilda) Gauss limitedLinear 1;
+//    div((nuEff*dev(T(grad(U))))) Gauss linear;
+//    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+
+	div((nuEff*dev2(T(grad(U))))) Gauss linear;	 	
+	div(phi,U)      Gauss upwind; //Gauss linearUpwind grad(U); //Gauss upwind;
+	div(phi,epsilon)      Gauss upwind;
+	div(phi,k)      Gauss upwind;
+
+//linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+    laplacian(diffusivity,cellDisplacement)  Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+oversetInterpolation
+{
+	//method          inverseDistance;
+    method          trackingInverseDistance;
+
+    // The inverseDistance method uses a 'voxel' like search structure.
+    // Optionally specify the extent and number of divisions n.
+    // Note that it will allocate an array of nx*ny*nz. If not specified:
+    // - searchBox          : local mesh bounding box
+    // - searchBoxDivisions : root (2D) or cube-root(3D) of number of cells
+  //  searchBox           (-0.35 -0.35 0) (1.4 0.35 0.02);
+//    searchBoxDivisions  (200 120 1);
+}
+
+fluxRequired
+{
+    default         no;
+    pcorr           ;
+    p               ;
+}
+oversetInterpolationRequired
+{
+	U,
+	p,
+    omega;
+    k;
+    nut;
+}
+
+wallDist
+{
+    method Poisson;
+}
+// ************************************************************************* //

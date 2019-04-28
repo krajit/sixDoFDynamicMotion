@@ -1,0 +1,4 @@
+SOURCE = \
+sixDoFDynamicMotion.C \
+
+# sources

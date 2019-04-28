@@ -1,0 +1,106 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  plus                                  |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      nut;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [ 0 2 -1 0 0 0 0 ];
+
+internalField   uniform 0;
+
+boundaryField
+{
+        
+
+    ballIn
+    {
+		type    nutkWallFunction; //codedFixedValue;
+        name    cricketBall;
+
+        code
+        #{
+            const label topCell = 28;
+
+            vectorField faceCenters(this->patch().Cf());
+
+			vector currentCOM = sum(faceCenters)/faceCenters.size();
+
+			scalarField nut(faceCenters.size(), 0.0);
+
+			scalar smoothNut = 0.0;
+			scalar seamNut   = 0.0; //0.1;
+			scalar roughNut  = 0.0; //0.01;
+			scalar PI = 3.14159265;
+
+
+			scalar seamWidth = 20;   // in angle (deg) subtended at center
+
+			
+			forAll(faceCenters, faceI) {
+
+				vector ot = faceCenters[topCell] - currentCOM; 
+				vector op = faceCenters[faceI] - currentCOM; 
+
+				if ((ot&op)/(mag(ot)*mag(op)) >= cos( (90.0 - seamWidth/2)*PI/180))
+				{
+					// side on top of seam
+					// keep it smooth
+					nut[faceI] = smoothNut;
+				} else if ((ot&op)/(mag(ot)*mag(op)) >= cos( (90.0 + seamWidth/2)*PI/180))
+				{
+					// seam
+					
+					nut[faceI] = seamNut;
+				} else
+				{
+					// remaining sides are rought
+					nut[faceI] = roughNut;
+				}
+
+
+			}
+            operator==(nut);
+        #};
+        value           $internalField;
+    }
+
+    ballOut
+    {
+        type            overset;
+    }
+
+	inlet
+    {
+        type            zeroGradient;
+    }
+
+	outlet
+    {
+        type            zeroGradient;
+    }
+
+	sides
+    {
+        type            zeroGradient;
+    }
+
+
+	frontAndBack
+	{
+		type empty;	
+	}
+
+
+}
+
+// ************************************************************************* //

@@ -1,0 +1,21 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+flowVelocity         (-30 0 0);
+pressure             0;
+turbulentKE          4.5;
+turbulentOmega       303.0;
+turbulentEpsilon       122.0;
+
+
+
+// #inputMode           merge
+
+
+
+// ************************************************************************* //

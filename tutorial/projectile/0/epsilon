@@ -1,0 +1,69 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+#include "include/initialConditions"
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform $turbulentEpsilon;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform $turbulentEpsilon;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+    sides
+    {
+        type            epsilonWallFunction;
+        refValue        uniform 0;
+        value           uniform $turbulentEpsilon;
+        Cmu             0.09;
+        kappa           0.41;
+        E               9.8;
+        beta1           0.075;
+    }
+
+    ballIn
+    {
+        type            epsilonWallFunction;
+        refValue        uniform 0;
+        value           uniform $turbulentEpsilon;
+        Cmu             0.09;
+        kappa           0.41;
+        E               9.8;
+        beta1           0.075;
+    }
+
+	ballOut 
+	{
+		type 		overset;
+	}
+
+	frontAndBack
+	{
+		type empty;	
+	}
+
+}
+
+
+// ************************************************************************* //
