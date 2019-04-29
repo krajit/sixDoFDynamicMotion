@@ -1,5 +1,7 @@
 ## Coupling solidBodyMotionFunction with sixDOF solver in OpenFOAM-v1812
 
+This repository is the source code for a new OpenFOAM's  `solidBodyMotionFunction` in which automatically integrates shear forces and returns the next position of the body patch. Here are two examples. 
+
 ### Simple-pendulum simulation in OpenFoam
 
 <center>
@@ -35,4 +37,19 @@ OpenFOAM has this class called `solidBodyMotionFunction` which is very convenien
 
 This repository is is the source code for  `sixDoFDynamicMotion`, is a child of `solidBodyMotionFunction`, which as private member `motion_` of the type `sixDoFRigidBodyMotion`. This member, `motion_`, is responsible for integrating pressure and shear force around the given patch, and solve for the resulting  translation and rotations. The resulting motion is returned as a `septernion`, through the `transform()` function. This is tested on two examples. Trajectory of a projectile motion, and a simple pendulum. Results look alright to me. 
 
-----------------
+### Compilation
+Switch to the `src` directory and run
+
+```
+wmake libso
+```
+
+### Examples
+Switch to `tutorial/pendulam` or `tutorial/projectile` and run
+```
+overPimpleDyMFoam
+```
+
+Enjoy.
+
+
