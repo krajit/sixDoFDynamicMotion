@@ -1,6 +1,6 @@
 ## Coupling solidBodyMotionFunction with sixDOF solver in OpenFOAM-v1812
 
-This repository is the source code for a new OpenFOAM's  `solidBodyMotionFunction` in which automatically integrates shear forces and returns the next position of the body patch. Here are two examples. 
+This repository is the source code for a new OpenFOAM's  `solidBodyMotionFunction` which automatically integrates shear forces and returns the next position of the body patch. Here are two examples. 
 
 ### Simple-pendulum simulation in OpenFoam
 
